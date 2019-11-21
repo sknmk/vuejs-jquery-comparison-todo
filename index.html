@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>todo list</title>
+
+    <style>
+        .form-control {
+            height: 50px;
+        }
+
+        label {
+            margin-bottom: 0
+        }
+
+        .container {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            cursor: pointer;
+            font-size: 18px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 22px;
+            width: 22px;
+            margin-top: 5px;
+            margin-bottom: 3px;
+            background-color: #eee;
+            border-radius: 50%;
+            transition: all .2s ease-out;
+        }
+
+        .container:hover input ~ .checkmark {
+            background-color: #ccc;
+            transition: all .2s ease-out;
+        }
+
+        /* When the checkbox is checked, add a blue background */
+        .container input:checked ~ .checkmark {
+            background-color: #2196F3;
+        }
+
+        /* Create the checkmark/indicator (hidden when not checked) */
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        /* Show the checkmark when checked */
+        .container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Style the checkmark/indicator */
+        .container .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+
+        .td_done {
+            background: rgba(0, 255, 58, 0.16);
+            text-decoration: line-through;
+            font-style: italic;
+        }
+
+        .input-group-text {
+            background: none;
+            border-left: none;
+        }
+
+        .form-control:focus,.form-control:active {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .dropdown-menu {
+            box-shadow: 0 7px 8px -4px rgba(0,0,0,0.20),
+            0 12px 17px 2px rgba(0,0,0,0.14),
+            0 5px 22px 4px rgba(0,0,0,0.12);
+            border: none;
+        }
+
+        .link {
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row" id="todo_app">
+        <div class="offset-lg-4 col-lg-4 pt-5" id="todo-type-container">
+            <span class="badge badge-warning mb-1">todo</span>
+            <div class="input-group">
+                <input class="form-control"
+                       placeholder="&#128393; what's next?"
+                       id="todo_input"
+                       v-model="input"
+                       v-on:keyup.enter="td_add"
+                       v-on:keyup="autocomplete"
+                       v-on:blur="matching = []"
+                autocomplete="off"/>
+                <div class="input-group-append" v-if="input">
+                    <span class="input-group-text">
+                        <input-resetter input_name="input"></input-resetter>
+                    </span>
+                </div>
+            </div>
+            <div class="dropdown mt-2">
+                <div class="dropdown-menu" v-bind:class="{'d-block': matching.length}">
+                    <div class="dropdown-item link" v-for="(item,index) in matching" v-on:click="set_suggestion(index)">{{item}}</div>
+                </div>
+            </div>
+
+        </div>
+        <div class="offset-lg-4 col-lg-4 py-3" id="todo-body" v-if="td_list.length">
+            <span class="badge badge-success mb-1">list ({{td_list.length}})</span>
+            <td-list :td_list=td_list></td-list>
+            <div class="text-right"><span class="badge badge-danger mb-1 link" v-on:click="reset">reset</span></div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
