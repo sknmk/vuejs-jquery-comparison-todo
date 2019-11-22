@@ -127,7 +127,6 @@
                        v-model="input"
                        v-on:keyup.enter="td_add"
                        v-on:keyup="autocomplete"
-                       v-on:blur="matching = []"
                 autocomplete="off"/>
                 <div class="input-group-append" v-if="input">
                     <span class="input-group-text">
@@ -136,7 +135,7 @@
                 </div>
             </div>
             <div class="dropdown mt-2">
-                <div class="dropdown-menu" v-bind:class="{'d-block': matching.length}">
+                <div class="dropdown-menu" v-bind:class="{'d-block': matching.length}" v-on:blur="matching = []">
                     <div class="dropdown-item link" v-for="(item,index) in matching" v-on:click="set_suggestion(index)">{{item}}</div>
                 </div>
             </div>
