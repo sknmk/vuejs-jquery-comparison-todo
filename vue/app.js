@@ -26,8 +26,8 @@ Vue.component('input-resetter', {
   template: '<span class="link" v-on:click="reset_input">&#10060;</span>',
   props: {
     input_name: {
-      type: String
-    }
+      type: String,
+    },
   },
   methods: {
     reset_input: function() {
@@ -43,14 +43,13 @@ let vm = new Vue({
     td_list: [],
     matching: [],
     suggestions: [],
-    fetched: []
+    fetched: [],
   },
   mounted() {
     if (localStorage.td_list.length > 1)
       this.td_list = JSON.parse(localStorage.getItem('td_list'));
-    axios
-        .get('https://suggestions.free.beeceptor.com/suggest')
-        .then(response => (this.suggestions = response.data));
+    axios.get('https://api.coindesk.com/v1/bpi/currentprice.json').
+        then(response => (this.suggestions = Object.keys(response.data.bpi)));
   },
   methods: {
     td_add: function() {
@@ -77,4 +76,3 @@ let vm = new Vue({
     },
   },
 });
-
